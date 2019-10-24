@@ -8,12 +8,11 @@ pipeline {
         }
     stage('Upload to AWS') {
       steps {
-        sh 'echo "Hello World - Vijesh Puttaswamy"'
-        sh '''
-                  echo "Multi-line works too!"
-                  ls -lrtha
-                '''
-      }
+                withAWS(region:'sydney',credentials:'aws-static') {
+		        sh 'echo "Hello World with AWS"'
+                s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'index.html', bucket:'jenkins-pipeline-vp')
+                }
+            }
+        }
     }
-  }
-}     
+}
